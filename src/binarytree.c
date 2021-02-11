@@ -104,9 +104,11 @@ void bt_destroy(struct BinaryTree *bt) {
 void bt_nodePreorder(struct Node *node) {
     printf("%llu \n", node->payload);
     if (node->left != NULL) {
+        printf("L: ");
         bt_nodePreorder(node->left);
     }
     if (node->right != NULL) {
+        printf("R: ");
         bt_nodePreorder(node->right);
     }
 }

@@ -3,8 +3,18 @@
 # workspace environment
 .vscode
 
-#ignore .o files and executables
-*.o
-leetcode5
-linkedlisttests
-binarytreetests
+# build
+build
+
+# cache
+.cache
+
+compile_commands.json
+
+
+
+# ignore .o files and executables
+# *.o
+# leetcode5
+# linkedlisttests
+# binarytreetests
