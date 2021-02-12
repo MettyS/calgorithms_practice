@@ -10,6 +10,7 @@ struct Node {
 
 struct LinkedList {
     struct Node *head;
+    struct Node *tail;
 };
 
 struct LinkedList *ll_create() {
@@ -34,6 +35,9 @@ void ll_append(struct LinkedList *ll, void *payload) {
     }
     ptr->next = node;
 }
+
+void *ll_pushBack(struct LinkedList *ll, uint64_t);
+void *ll_popFront(struct LinkedList *ll, uint64_t);
 
 void *ll_get(struct LinkedList *ll, uint64_t index) {
     struct Node *ptr = ll->head;

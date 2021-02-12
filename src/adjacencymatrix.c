@@ -19,6 +19,10 @@ struct AdjacencyMatrix *am_create(uint64_t numNodes) {
     struct AdjacencyMatrix *am = (struct AdjacencyMatrix *)malloc(sizeof(struct AdjacencyMatrix));
     struct Edge *matrix = (struct Edge *)malloc(numNodes * numNodes * sizeof(struct Edge));
     
+    for (uint64_t i = 0; i < numNodes*numNodes; ++i) {
+        matrix[i].weight = ULLONG_MAX;
+    }
+
     am->matrix = matrix;
     am->rowLength = numNodes;
     return am;
@@ -29,16 +33,6 @@ void am_createEdge(struct AdjacencyMatrix *am, uint64_t nodeFrom, uint64_t nodeT
     // uint64_t nodeToRealIndex = nodeTo + (am->rowLength * nodeFrom);
     am->matrix[nodeFromRealIndex].weight = w;
 }
-
-// uint64_t ULLONG_MAX is failure
-uint64_t am_shortestPath(struct AdjacencyMatrix *am, uint64_t nodeFrom, uint64_t nodeTo);
-
-void am_destroy(struct AdjacencyMatrix *am) {
-    free(am->matrix);
-    free(am);
-}
-
-
 
 void am_printMatrix(struct AdjacencyMatrix *am) {
     printf(" ");
@@ -51,14 +45,25 @@ void am_printMatrix(struct AdjacencyMatrix *am) {
         for(uint64_t u = 0; u < am->rowLength; ++u) {
             uint64_t realIndex = u + (am->rowLength * i);
 
-            if (am->matrix[realIndex].weight) {
+            if (am->matrix[realIndex].weight == ULLONG_MAX) {
+                printf("%5s", ".");
+            }
+            else if (am->matrix[realIndex].weight) {
                 printf("%5llu", am->matrix[realIndex].weight);
             }
             else {
-                printf("%5s", ".");
+                printf("%5s", "er");
             }
         }
         printf("\n");
     }
     printf("\n%s\n", "to");
 }
+
+void am_destroy(struct AdjacencyMatrix *am) {
+    free(am->matrix);
+    free(am);
+}
+
+// uint64_t ULLONG_MAX is failure
+uint64_t am_shortestPath(struct AdjacencyMatrix *am, uint64_t nodeFrom, uint64_t nodeTo);
