@@ -5,13 +5,14 @@
 
 /// Returns true if lhs < rhs
 typedef bool (*ComparisonFn)(const void *, const void *);
-typedef void * BHPayload;
+typedef void *BHPayload;
 
 struct BinaryHeap;
 struct BinaryHeap *bh_create(ComparisonFn comparison);
 
 void bh_push(struct BinaryHeap *bh, BHPayload payload);
 BHPayload bh_popMin(struct BinaryHeap *bh);
+void bh_print(struct BinaryHeap *bh);
 
 void bh_destroy(struct BinaryHeap *bh);
 
