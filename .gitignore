@@ -11,6 +11,8 @@ build
 
 compile_commands.json
 
+workspace.code-workspace
+
 
 
 # ignore .o files and executables
