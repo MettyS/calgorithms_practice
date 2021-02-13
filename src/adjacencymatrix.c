@@ -71,7 +71,7 @@ void am_destroy(struct AdjacencyMatrix *am) {
 
 struct NodePath {
     uint64_t weight;
-    uint64_t node;
+    uint64_t prevNode;
 };
 
 static bool comparePathWeight(const void *l, const void *r) {
@@ -86,36 +86,34 @@ uint64_t am_shortestPath(struct AdjacencyMatrix *am, uint64_t nodeFrom, uint64_t
 
     struct NodePath *root = (struct NodePath *)malloc(sizeof(struct NodePath));
     root->weight = 0;
-    root->node = nodeFrom;
+    root->prevNode = nodeFrom;
 
     do {
-        uint64_t from = root->node;
-
         for (uint64_t i = 0; i < am->rowLength; ++i) {
-            if (i == nodeFrom) 
+            uint64_t toIndex = root->prevNode + (i * am->rowLength);
+            // if it is a loop edge back to lastnode
+            if (root->prevNode == i) 
                 continue;
-            if (am->matrix[i].visited) 
+            // look ahead to see if proposed node has been visited
+            if (am->matrix[toIndex].visited) 
                 continue;
-
-            uint64_t toIndex = from + (i * am->rowLength);
             // this will set all nodes in this column to visited
             am->matrix[toIndex].visited = true;
             // see if edge is invalid
             if (am->matrix[toIndex].weight == ULLONG_MAX)
                 continue;
-            // look ahead to see if proposed node has been visited
     
             struct NodePath *node = (struct NodePath *)malloc(sizeof(struct NodePath));
             // add the weight of path to here to the new edge
             node->weight = root->weight + am->matrix[toIndex].weight;
-            node->node = i;
+            node->prevNode = i;
 
             bh_push(bh, node);
         }
 
         free(root);
         root = bh_popMin(bh);
-    } while (root != NULL && root->node != nodeTo);
+    } while (root != NULL && root->prevNode != nodeTo);
 
     uint64_t resWeight = ULLONG_MAX;
     if (root != NULL) {
